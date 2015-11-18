@@ -1,6 +1,7 @@
 # YouHadOneJob
 
-***A collection of scripts that had one job, and have not made it into a proper tool.™***
+***A collection of scripts that had one job,
+and are unlikely to be of future interest.™***
 
 ## Contents
 
