@@ -1,0 +1,30 @@
+{{ pi_email }}
+
+Dear Dr. {{ pi_name }},
+
+You are receiving this email because you are PI of the following program(s) that had allocated targets that were observed by K2 in the past year or are being observed in the near future:
+
+{% for idx, program in programs.iterrows() -%}
+* Program {{ program['program'] }}
+  {{ program['title'] }}
+  {{ program['targets'] }} target masks observed
+  
+{% endfor -%}
+The full list of approved K2 programs up to and including Campaign 8 can be found here: http://keplerscience.arc.nasa.gov/k2-approved-programs.html.
+This list includes both the funded and non-funded programs.  Since funding is competitive in the K2 Guest Observer (GO) program, many programs that are regretfully not awarded funding still have targets that are approved for observations with K2. 
+
+We wanted to make you aware that proposals are currently being solicited for the K2 GO Cycle 4. Cycle 4 includes Campaigns 11, 12, and 13.  We highly encourage you to submit a Cycle 4 proposal to continue your previous or ongoing K2 programs.
+
+The due date for (mandatory) Step-1 proposals is 23:59 EST February 5, 2016. Step-2 proposals are due by 23:59 EST March 4, 2016. Investigators may not submit a Step-2 proposal without first submitting a Step-1 proposal. Proposers should also be aware that the execution of Cycle 4 is contingent upon the outcome of the 2016 Senior Review.  The full NASA Research Announcement for Cycle 4 is found here: http://nspires.nasaprs.com/external/solicitations/summary.do?method=init&solId={7A635D8E-1B2B-2488-5E0D-5C81471D150B}&path=open 
+
+Information about the proposal process, including the scope of the GO program, proposal evaluation criteria, availability of funds, eligibility, target selection tools, the submission process, and frequently asked questions, is detailed on the proposal preparation page at the Kepler & K2 Science Center website (http://keplerscience.arc.nasa.gov/k2-proposing-targets.html).
+
+Proposers should read the call carefully. We note there two major changes since Cycle 3:
+
+* Small proposals will now have a budget capped at $50,000, while Large proposals will be awarded up to $150,000.
+* An additional 0.5 pages is allowed in Large proposals to describe progress the proposers have made to delivering value-added community resources.
+
+Any questions regarding this program should be sent to keplergo@mail.arc.nasa.gov.
+
+Regards,
+Knicole, on behalf of the Kepler/K2 Guest Observer Office
