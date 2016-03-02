@@ -9,7 +9,7 @@ import pandas
 from K2fov import c9
 from K2fov.fields import getKeplerFov
 
-LATE_TARGETS = pandas.read_fwf('late_targets_K2C9a_v3.dat',
+LATE_TARGETS = pandas.read_fwf('input/late_targets_K2C9a_v3.dat',
                                names=('ra', 'dec', 'channel', 'col', 'row',
                                       'peakmag', 'name', 'name2'))
 
@@ -30,6 +30,11 @@ def test_magnitudes():
 
 def test_pixelcost():
     """The total pixel cost of all masks should not exceed 10,000 pixels."""
-    masks = open('custom-late-target-masks-c9a.txt').readlines()
+    masks = open('output/custom-late-target-masks-c9a.txt').readlines()
     pixelcost = sum([mask.count(';') + 1 for mask in masks])
     assert pixelcost < 10000
+
+
+if __name__ == '__main__':
+    import pytest
+    pytest.main()
