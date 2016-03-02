@@ -14,7 +14,7 @@ SCIENCE_COLS = (12, 1111)  # (min, max) col number
 KEPLER_CHANNEL_SHAPE = (1070, 1132)  # (nrows, ncols)
 
 # Dictionary to maps K2 channel numbers onto skygroup numbers
-CHANNEL_TO_SKYGROUP = dict(np.genfromtxt('channel_to_skygroup_season_0.txt', dtype=int))
+CHANNEL_TO_SKYGROUP = dict(np.genfromtxt('input/channel_to_skygroup_season_0.txt', dtype=int))
 
 # Definition of a 5x5 and a 11x11 mask
 MASK_5_BY_5 = ";".join(["{},{}".format(x, y)
@@ -85,7 +85,7 @@ class CustomApertureFile(object):
 if __name__ == '__main__':
     apfile = CustomApertureFile()
     fov = fields.getKeplerFov(9)
-    targetlist = pd.read_fwf('late_targets_K2C9a_v3.dat',
+    targetlist = pd.read_fwf('input/late_targets_K2C9a_v3.dat',
                              names=('ra', 'dec', 'channel', 'col', 'row',
                                     'peakmag', 'name', 'name2'))
     for idx, target in targetlist.iterrows():
@@ -96,8 +96,8 @@ if __name__ == '__main__':
         assert(np.abs(col - target.col) < 0.1)
         assert(np.abs(row - target.row) < 0.1)
         apfile.add_target(channel, col, row, name=target['name'])
-    apfile.write('custom-late-target-masks-c9a.txt')
-    apfile.write_json('k2-c9a-late-targets.json')
+    apfile.write('output/custom-late-target-masks-c9a.txt')
+    apfile.write_json('output/k2-c9a-late-targets.json')
 
     # Print a little summary
     print('Number of targets: {}'.format(len(targetlist)))
