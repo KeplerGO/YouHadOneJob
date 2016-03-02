@@ -74,7 +74,7 @@ class CustomApertureFile(object):
     def write(self, output_fn):
         """Write the custom apertures to the format required by Kepler."""
         with open(output_fn, "w") as out:
-            out.write('Category: Ongoing_Microlens_Events\n')
+            out.write('Category: Ongoing_Microlens_Events_C9a\n')
             for mask in self.masks:
                 out.write('NEW|{skygroup:d}|{flags}|{row}|{col}|{mask}\n'.format(**mask))
 
