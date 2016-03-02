@@ -7,7 +7,7 @@ the custom aperture masks (`output/custom-late-target-masks-c9a.txt`).
 
 ## Summary
 
-Number of targets: 34
-Number of masks: 162
-Total pixel cost: 7314
+* Number of targets: 34
+* Number of masks: 162
+* Total pixel cost: 7314
 
