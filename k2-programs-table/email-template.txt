@@ -1,0 +1,25 @@
+Dear Dr. {{ pi_name }},
+
+You are receiving this email because you are the PI of one or more observing programs that were partially or fully observed as part of K2 Campaign {{ campaign }}.
+
+We are happy to inform you that the data for this campaign have been processed and are now available for download from the archive.  The details of your program(s) are as follows:
+
+{% for idx, program in programs.iterrows() -%}
+Program {{ program['program_id'] }}: "{{ program['title'] }}"
+→ {{ program['targets'] }} target mask(s) observed
+→ Data access: https://archive.stsci.edu/k2/data_search/search.php?action=Search&ktc_investigation_id={{ program['program_id'] }}
+
+{% endfor -%}
+
+The full list of targets and programs observed can be found at
+    
+    http://keplerscience.arc.nasa.gov/k2-approved-programs.html#campaign-{{ campaign }}
+
+We also wanted to make you aware that proposals are now being solicited for Campaigns 14, 15, and 16 (K2 GO Cycle 5).  We encourage you to submit a proposal to continue your previous or ongoing K2 programs.  The due date for (mandatory) Step-1 proposals is 23:59 EST September 23, 2016. More information may be found on the proposal preparation page on our website:
+
+    http://keplerscience.arc.nasa.gov/k2-proposing-targets.html
+
+Please send any questions to keplergo@mail.arc.nasa.gov.
+
+Regards,
+Geert Barentsen, on behalf of the Kepler/K2 Guest Observer Office 🚀
