@@ -6,6 +6,7 @@ pi_first_name
 pi_middle_name
 pi_last_name
 pi_institution
+pi_email
 coi_names
 title
 summary
@@ -32,8 +33,8 @@ def parse_excel_file(filename, campaign):
     df = pd.read_excel(filename)
     df = df[~df["Response seq number"].isnull()]
 
-    newtable = df[["Response seq number", "PI First name", "PI Middle name", "PI Last name", "Company name", "Title", "Summary"]].copy()
-    newtable.columns = ['program_id', 'pi_first_name', 'pi_middle_name', 'pi_last_name', 'pi_institution', 'title', 'summary']
+    newtable = df[["Response seq number", "PI First name", "PI Middle name", "PI Last name", "Company name", "Email", "Title", "Summary"]].copy()
+    newtable.columns = ['program_id', 'pi_first_name', 'pi_middle_name', 'pi_last_name', 'pi_institution', 'pi_email', 'title', 'summary']
 
     # Reformat proposal id
     for rowidx in newtable.index:
@@ -84,6 +85,12 @@ if __name__ == '__main__':
                  '8': 'input/K2GO3_2 Investigation Report.xls',
                  '9': 'input/k2-c9-programs.csv',
                  '10': 'input/K2GO3_2 Investigation Report.xls',
+                 '11': 'input/K2GO4 Step 2 Investigation Report.xls',
+                 '12': 'input/K2GO4 Step 2 Investigation Report.xls',
+                 '13': 'input/K2GO4 Step 2 Investigation Report.xls',
+                 '14': 'input/K2GO5 Step 2 Investigation Report.xls',
+                 '15': 'input/K2GO5 Step 2 Investigation Report.xls',
+                 '16': 'input/K2GO5 Step 2 Investigation Report.xls',
                  'ddt': 'input/k2-ddt-programs.csv',}
     programs = [parse_file(filename, campaign)
                 for campaign, filename in campaigns.items()]
