@@ -15,6 +15,11 @@ import pandas as pd
 import re
 
 
+DESIRED_COLUMNS = ['program_id', 'campaign',
+                   'pi_first_name', 'pi_middle_name', 'pi_last_name',
+                   'pi_institution', 'pi_email', 'title', 'summary']
+
+
 def cleanup_summary(summary):
     """Make a proposal summary suitable for the web."""
     # Some abstracts contain control characters, remove these
@@ -31,10 +36,11 @@ def cleanup_summary(summary):
 def parse_excel_file(filename, campaign):
     """Returns a dataframe."""
     df = pd.read_excel(filename)
+    df.loc[:, 'campaign'] = int(campaign)
     df = df[~df["Response seq number"].isnull()]
 
-    newtable = df[["Response seq number", "PI First name", "PI Middle name", "PI Last name", "Company name", "Email", "Title", "Summary"]].copy()
-    newtable.columns = ['program_id', 'pi_first_name', 'pi_middle_name', 'pi_last_name', 'pi_institution', 'pi_email', 'title', 'summary']
+    newtable = df[["Response seq number", "campaign", "PI First name", "PI Middle name", "PI Last name", "Company name", "Email", "Title", "Summary"]].copy()
+    newtable.columns = DESIRED_COLUMNS
 
     # Reformat proposal id
     for rowidx in newtable.index:
@@ -50,17 +56,20 @@ def parse_excel_file(filename, campaign):
             newtable.loc[rowidx, "pi_institution"] = ""
 
     # Add a column with the co-investigator names separated by semi-colons
-    newtable['coi_names'] = None
-    for rowidx in newtable.index:
-        co_investigators = []
-        for idx in range(1, 99):  # Number of "Member" columns is variable
-            try:
-                field = df.loc[rowidx]["Member - {} Member name; Role; Email; Organization; Phone".format(idx)]
-                if field != "" and not pd.isnull(field):
-                    co_investigators.append(field.split(";")[0].strip())
-            except KeyError:
-                continue  # Max number of "Member" columns reached
-        newtable.loc[rowidx, 'coi_names'] = "; ".join(co_investigators)
+    if 'coi_names' in df.columns:
+        newtable['coi_names'] = df['coi_names']
+    else:
+        newtable['coi_names'] = None
+        for rowidx in newtable.index:
+            co_investigators = []
+            for idx in range(1, 99):  # Number of "Member" columns is variable
+                try:
+                    field = df.loc[rowidx]["Member - {} Member name; Role; Email; Organization; Phone".format(idx)]
+                    if field != "" and not pd.isnull(field):
+                        co_investigators.append(field.split(";")[0].strip())
+                except KeyError:
+                    continue  # Max number of "Member" columns reached
+            newtable.loc[rowidx, 'coi_names'] = "; ".join(co_investigators)
 
     # Remove unwanted characters from the proposal summaries
     newtable['summary'].fillna('', inplace=True)
@@ -72,12 +81,19 @@ def parse_excel_file(filename, campaign):
 
 def parse_file(filename, campaign):
     if filename.endswith('xls'):
-        return parse_excel_file(filename, campaign)
-    return pd.read_csv(filename)
+        df = parse_excel_file(filename, campaign)
+    else:
+        df = pd.read_csv(filename)
+        if campaign != 'ddt':
+            df.loc[:, 'campaign'] = int(campaign)
+    return df
 
 
 if __name__ == '__main__':
-    campaigns = {'0123': 'input/k2-c0123-programs.csv',
+    campaigns = {'0': 'input/k2-c0-programs.csv',
+                 '1': 'input/k2-c1-programs.csv',
+                 '2': 'input/k2-c2-programs.csv',
+                 '3': 'input/k2-c3-programs.csv',
                  '4': 'input/K2GO1_programs_geert_edit.xls',
                  '5': 'input/K2GO1_programs_geert_edit.xls',
                  '6': 'input/K2GO2_1 Updated Investigation Report 1_28.xls',
@@ -91,7 +107,13 @@ if __name__ == '__main__':
                  '14': 'input/K2GO5 Step 2 Investigation Report.xls',
                  '15': 'input/K2GO5 Step 2 Investigation Report.xls',
                  '16': 'input/K2GO5 Step 2 Investigation Report.xls',
-                 'ddt': 'input/k2-ddt-programs.csv',}
+                 '17': 'input/k2go6-proposals-with-rank.xls',
+                 '18': 'input/k2go6-proposals-with-rank.xls',
+                 '19': 'input/k2go6-proposals-with-rank.xls',
+                 '20': 'input/K2GO7.csv',
+                 'ddt': 'input/k2-ddt-programs.csv'}
     programs = [parse_file(filename, campaign)
                 for campaign, filename in campaigns.items()]
-    pd.concat(programs).to_csv('k2-programs.csv', index=False)
+    df = pd.concat(programs).sort_values(["campaign", "program_id"])
+    df[DESIRED_COLUMNS].to_csv('k2-programs.csv', index=False)
+    df[DESIRED_COLUMNS].to_excel('k2-programs.xls', index=False)
