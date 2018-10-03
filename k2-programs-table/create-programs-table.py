@@ -17,7 +17,7 @@ import re
 
 DESIRED_COLUMNS = ['program_id', 'campaign',
                    'pi_first_name', 'pi_middle_name', 'pi_last_name',
-                   'pi_institution', 'pi_email', 'title', 'summary']
+                   'pi_institution', 'pi_email', 'coi_names', 'title', 'summary']
 
 
 def cleanup_summary(summary):
@@ -40,7 +40,9 @@ def parse_excel_file(filename, campaign):
     df = df[~df["Response seq number"].isnull()]
 
     newtable = df[["Response seq number", "campaign", "PI First name", "PI Middle name", "PI Last name", "Company name", "Email", "Title", "Summary"]].copy()
-    newtable.columns = DESIRED_COLUMNS
+    newtable.columns = ['program_id', 'campaign',
+                        'pi_first_name', 'pi_middle_name', 'pi_last_name',
+                        'pi_institution', 'pi_email', 'title', 'summary']
 
     # Reformat proposal id
     for rowidx in newtable.index:
